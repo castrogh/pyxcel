@@ -1,6 +1,12 @@
 import pandas as pd
 from twilio.rest import Client
 
+# Your Account SID from twilio.com/console
+account_sid = "AC1600cf3df8595167d56965f45888af59"
+# Your Auth Token from twilio.com/console
+auth_token  = "3330dd128e910e507f7f8039ca97ffad"
+client = Client(account_sid, auth_token)
+
 lista_meses = ['janeiro', 'fevereiro', 'marco', 'abril', 'maio', 'junho']
 
 for mes in lista_meses:
@@ -11,18 +17,9 @@ for mes in lista_meses:
         vendedor = tabela_vendas.loc[tabela_vendas['Vendas'] > 55000, 'Vendedor'].values[0] # O ".loc[linha, coluna]" é utilizado para que possa ser localizado o conteúdo da célula em questão, de acordo com a linha e coluna passadas como parâmetro
         vendas = tabela_vendas.loc[tabela_vendas['Vendas'] > 55000, 'Vendas'].values[0] #o .loc tem por padrão trazer como resultado uma tabela que contém o valor localizado, mesmo que seja um valor único, sendo assim, neste caso, é necessário utilizar o "values[0]", para que seja retornado somente o valor em si
         print(f'No mês de {mes}, a meta foi batida por: {vendedor}! Com o valor de: {vendas}!')
+        message = client.messages.create(
+            to="+5511988614529", 
+            from_="+18588082304",
+            body=f'No mês de {mes}, a meta foi batida por: {vendedor}! Com o valor de: {vendas}!')
 
-
-# Your Account SID from twilio.com/console
-account_sid = "ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-# Your Auth Token from twilio.com/console
-auth_token  = "your_auth_token"
-
-client = Client(account_sid, auth_token)
-
-message = client.messages.create(
-    to="+15558675309", 
-    from_="+15017250604",
-    body="Hello from Python!")
-
-print(message.sid)
+        print(message.sid)
